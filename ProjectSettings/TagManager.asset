@@ -9,6 +9,7 @@ TagManager:
   - Totem
   - Stairs
   - ScoreManager
+  - Heal
   layers:
   - Default
   - TransparentFX
@@ -17,9 +18,9 @@ TagManager:
   - Water
   - UI
   - Monster
-  - 
-  - 
-  - 
+  - Sword
+  - Stone
+  - Stair
   - 
   - 
   - 

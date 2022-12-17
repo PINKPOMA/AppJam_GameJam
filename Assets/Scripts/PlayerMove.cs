@@ -27,9 +27,15 @@ public class PlayerMove : MonoBehaviour
     public int[] inventory;
     [SerializeField]private int hp;
     [SerializeField]private bool isDelay;
+    [SerializeField]private bool isTeleportDelay;
     [SerializeField]private GameObject createUI;
     [SerializeField]private GameObject barier;
     [SerializeField] private bool noDamage;
+    [SerializeField] private AudioSource hit;
+    [SerializeField] private AudioSource slash;
+    [SerializeField] private AudioSource gettingItem;
+    [SerializeField] private AudioSource teleportSound;
+    [SerializeField] private AudioSource dinkSound;
 
     private void Start()
     {
@@ -49,6 +55,7 @@ public class PlayerMove : MonoBehaviour
         if (!isDelay && Input.GetKeyDown(KeyCode.Mouse0))
         {
             anim.SetTrigger("Sword");
+            slash.Play();
             StartCoroutine(Delay());
         }
     }
@@ -91,6 +98,7 @@ public class PlayerMove : MonoBehaviour
     {
         if (noDamage) return;
         hp -= damage;
+        hit.Play();
         hpText.text = $"hp: {hp}";
         if (hp <= 0)
         {
@@ -103,13 +111,13 @@ public class PlayerMove : MonoBehaviour
     {
         noDamage = true;
         barier.SetActive(true);
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1.5f);
         barier.SetActive(false);
         noDamage = false;
     }
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.CompareTag("Stairs"))
+        if (col.CompareTag("Stairs") && !isTeleportDelay)
         {
             if (col.name == "StairA")
             {
@@ -119,12 +127,23 @@ public class PlayerMove : MonoBehaviour
             {
                 transform.position = new Vector3(-1.5f, 7f);
             }
+            teleportSound.Play();
+            StartCoroutine(TeleportDelay());
         }
 
         if (col.CompareTag("Totem"))
         {
-            dynamicText.text = "아이템을 만드시려면 토템 근처에서 E를 눌러주세요";
+            dynamicText.text = "아이템을 만드시려면 토템에 다가가세요";
             Invoke("ClearDynamic", 2.5f);
+        }
+        if (col.CompareTag("Heal"))
+        {
+            dinkSound.Play();
+            hp += 3;
+            if (hp > 5)
+                hp = 5;
+            hpText.text = $"hp: {hp}";
+            Destroy(col.gameObject);
         }
         if (col.CompareTag("Item"))
         {
@@ -146,8 +165,15 @@ public class PlayerMove : MonoBehaviour
                     inventory[(int)InventoryItem.Silver] += 1;
                     break;
             }
+            gettingItem.Play();
             Destroy(col.gameObject);
         }
+    }
+    IEnumerator TeleportDelay()
+    {
+        isTeleportDelay = true;
+        yield return new WaitForSeconds(1f);
+        isTeleportDelay = false;
     }
 
     void ClearDynamic()
@@ -155,9 +181,9 @@ public class PlayerMove : MonoBehaviour
         dynamicText.text = "";
     }
 
-    private void OnTriggerStay2D(Collider2D other)
+    private void OnCollisionEnter2D(Collision2D col)
     {
-        if (other.CompareTag("Totem")&& Input.GetKeyDown(KeyCode.E))
+        if (col.gameObject.CompareTag("Totem"))
         {
             createUI.SetActive(true);
         }

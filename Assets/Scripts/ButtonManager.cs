@@ -11,6 +11,7 @@ public class ButtonManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI playerNameText;
     public GameObject inputField_Name;
     public GameObject rankObject;
+    public GameObject helpUI;
     private bool isPushRank = false;
     private bool isPushHelp = false;
     private void Start()
@@ -52,5 +53,10 @@ public class ButtonManager : MonoBehaviour
             isPushRank = false;
         } 
     }
-    
+
+    public void HelpButton()
+    {
+        helpUI.SetActive(true);
+    }
+
 }

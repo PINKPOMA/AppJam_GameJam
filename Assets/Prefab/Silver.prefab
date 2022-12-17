@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6744452731276023313}
   - component: {fileID: 6744452731276023312}
   - component: {fileID: 6744452731276023326}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Silver
   m_TagString: Item
   m_Icon: {fileID: 0}

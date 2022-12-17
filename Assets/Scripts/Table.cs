@@ -22,6 +22,7 @@ public class Table : MonoBehaviour
     [SerializeField] private int[] itemLinkNote;
     [SerializeField] private TextMeshProUGUI sellText;
     [SerializeField] private TextMeshProUGUI[] inventoryCount;
+    [SerializeField] private AudioSource hammer ;
 
     private void FixedUpdate()
     {
@@ -156,6 +157,7 @@ public class Table : MonoBehaviour
             plr.score += 0;
         }
         nowLinkCount = 0;
+        hammer.Play();
         yield return new WaitForSeconds(1f);
         sellText.text = ""; 
         itemLink[0].sprite  = itemSprite[5];

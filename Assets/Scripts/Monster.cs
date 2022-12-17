@@ -14,6 +14,7 @@ public class Monster : MonoBehaviour
     [SerializeField] private int damages;
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private Animator anim;
+    [SerializeField] private AudioSource hit ;
     
 
     private void Start()
@@ -64,7 +65,7 @@ public class Monster : MonoBehaviour
     void AddDamage(int num)
     {
         hp -= num;
-
+        hit.Play();
         if (hp <= 0)
         {
             anim.SetTrigger("death");
